@@ -1,0 +1,16 @@
+- User registration
+- login user
+- Post can be crated by loggedin user
+    - Title, Content, Created by and when
+- Post should be visible to everyone without login
+
+Tech stack:
+backend: java with spring boot.
+
+frontend:
+1. html, css, javascript / reactjs
+or
+2. Springboot with thymeleaf (MVC)
+
+DB:
+Postgresql / MongoDB
