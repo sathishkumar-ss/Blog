@@ -22,7 +22,7 @@
             author: document.getElementById("author").value,
         };
 
-        const response = await fetch("/api/posts", {
+        const response = await fetch("/api/post", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(postData)
