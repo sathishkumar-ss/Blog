@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class demo {
-    @GetMapping("/welcome")
-    public String welcome(){
-        return "Starting";
+    @GetMapping("/blog")
+    public String blog(){
+        return "Changed application properties for postgres";
     }
     
 }

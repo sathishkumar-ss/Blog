@@ -10,7 +10,7 @@ backend: java with spring boot.
 frontend:
 1. html, css, javascript / reactjs
 or
-2. Springboot with thymeleaf (MVC)
+<!-- 2. Springboot with thymeleaf (MVC) -->
 
 DB:
-Postgresql / MongoDB
+Postgresql
