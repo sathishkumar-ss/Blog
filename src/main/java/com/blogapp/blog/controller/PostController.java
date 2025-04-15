@@ -17,6 +17,18 @@ public class PostController {
 
     @GetMapping
     public List<Post> getAllPosts() {
+        System.out.println("sathish1");
+        return postService.getAllPosts();
+    }
+    
+    @GetMapping("/search")
+    public List<Post> searchPosts(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String author) {
+        // Here you would implement search logic with the service
+        // For now we just return all posts
+        System.out.println("Search request with: title=" + title + ", content=" + content + ", author=" + author);
         return postService.getAllPosts();
     }
 

@@ -15,6 +15,7 @@ public class PostService {
     private PostRepository postRepository;
 
     public List<Post> getAllPosts() {
+        System.out.println("sathishhh");
         return postRepository.findAll();
     }
 
