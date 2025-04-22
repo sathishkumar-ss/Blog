@@ -20,16 +20,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf().disable()
-        .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-            // .csrf(csrf -> csrf.disable())
-            // .authorizeHttpRequests(authorize -> authorize
-            //     // .requestMatchers("/api/**").permitAll()
-            //     .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-            //     .requestMatchers("/", "/index.html", "/static/**", "/h2-console/**").permitAll()
-            //     .anyRequest().authenticated()
-            // )
-            // .headers(headers -> headers.frameOptions().disable());
+        //.csrf().disable()
+        //.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+             .csrf(csrf -> csrf.disable())
+             .authorizeHttpRequests(authorize -> authorize
+                 // .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                 .requestMatchers("/", "/index.html", "/static/**", "/h2-console/**").permitAll()
+                 .anyRequest().authenticated()
+             )
+             .headers(headers -> headers.frameOptions().disable());
         
         return http.build();
     }
