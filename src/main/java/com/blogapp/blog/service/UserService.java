@@ -16,9 +16,18 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User register(User user) {
+    // public User register(User user) {
+    //     user.setPassword(passwordEncoder.encode(user.getPassword()));
+    //     return userRepository.save(user);
+    // }
+    public String register(User user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            return "Username already exists";
+        }
+    
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+        return "Registration successful";
     }
 
     public boolean validateUser(String username, String password) {
