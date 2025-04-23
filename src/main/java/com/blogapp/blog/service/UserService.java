@@ -24,7 +24,8 @@ public class UserService {
     public boolean validateUser(String username, String password) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
         return optionalUser.isPresent() &&
-                optionalUser.get().getPassword().equals(password);
+                //optionalUser.get().getPassword().equals(password);
+                passwordEncoder.matches(password, optionalUser.get().getPassword());
     }
 
     public Optional<User> getByUsername(String username) {
