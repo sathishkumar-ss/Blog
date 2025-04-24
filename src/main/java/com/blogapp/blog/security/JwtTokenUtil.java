@@ -13,11 +13,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class JwtTokenUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    @Value("${JWT_SECRET}")
+    private String jwtSecret;
+    
+    private Key getSigningKey() {
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
     
     @Value("${jwt.expiration:86400000}") // Default 24 hours
     private long jwtExpiration;
@@ -36,7 +43,7 @@ public class JwtTokenUtil {
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(key)
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -60,7 +67,7 @@ public class JwtTokenUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
