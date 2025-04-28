@@ -3,6 +3,8 @@ package com.blogapp.blog.controller;
 import com.blogapp.blog.model.Post;
 import com.blogapp.blog.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +41,17 @@ public class PostController {
 
     @PostMapping
     public Post createPost(@RequestBody Post post) {
+        // Get the current authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        // Only set the author to the logged-in username if the author field is null or empty
+        if (authentication != null && authentication.isAuthenticated() && 
+            !"anonymousUser".equals(authentication.getPrincipal()) && 
+            (post.getAuthor() == null || post.getAuthor().trim().isEmpty())) {
+            // Set the author as the logged-in username
+            post.setAuthor(authentication.getName());
+        }
+        
         return postService.createPost(post);
     }
 
