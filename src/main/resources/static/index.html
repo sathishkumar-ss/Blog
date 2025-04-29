@@ -2,35 +2,756 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post Creator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #F50057;
+            --text-color: #333;
+            --light-bg: #F9F9F9;
+            --border-color: #E0E0E0;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #5A52E0;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color), #8B80FF);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: -3rem auto 3rem;
+            position: relative;
+        }
+        
+        .form-container h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        button:hover {
+            background-color: #5A52E0;
+            transform: translateY(-2px);
+        }
+        
+        .success-message {
+            background-color: var(--success-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .error-message {
+            background-color: var(--error-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .posts-container {
+            margin-top: 2rem;
+        }
+        
+        .post-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .post-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .post-meta {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .post-content {
+            margin-bottom: 1rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .auth-toggle {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .auth-toggle a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                margin: -2rem 1rem 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h2>Create New Post</h2>
-<form id="postForm">
-    <input type="text" id="title" placeholder="Title" required><br>
-    <textarea id="content" placeholder="Content" required></textarea><br>
-    <input type="text" id="author" placeholder="Author" required><br>
-    <button type="submit">Submit</button>
-</form>
+    <header>
+        <div class="header-content">
+            <div class="logo">BlogApp</div>
+            <nav class="nav-links">
+                <a href="#" id="homeLink">Home</a>
+                <a href="#" id="postsLink">Posts</a>
+                <a href="#" id="aboutLink">About</a>
+                <a href="#" id="contactLink">Contact</a>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="btn btn-outline" id="loginBtn">Login</button>
+                    <button class="btn btn-primary" id="registerBtn">Register</button>
+                </div>
+                <div class="auth-buttons hidden" id="userInfo">
+                    <span id="usernameDisplay"></span>
+                    <button class="btn btn-outline" id="logoutBtn">Logout</button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-<script>
-    document.getElementById("postForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const postData = {
-            title: document.getElementById("title").value,
-            content: document.getElementById("content").value,
-            author: document.getElementById("author").value,
-        };
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to BlogApp</h1>
+            <p>Share your thoughts and ideas with the world through our simple and elegant blog platform.</p>
+        </div>
+    </section>
 
-        const response = await fetch("/api/post", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(postData)
+    <div class="container">
+        <!-- Post Creation Form (Only visible when logged in) -->
+        <div class="form-container hidden" id="postFormContainer">
+            <h2>Create New Post</h2>
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" placeholder="Enter your post title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" placeholder="Write your blog post content here..." required></textarea>
+                </div>
+                
+                <button type="submit">Publish Post</button>
+            </form>
+            <div id="postSuccessMessage" class="success-message">
+                Your post has been published successfully!
+            </div>
+            <div id="postErrorMessage" class="error-message">
+                Error creating post. Please try again.
+            </div>
+        </div>
+
+        <!-- Posts Display -->
+        <div class="posts-container" id="postsContainer">
+            <h2>Recent Blog Posts</h2>
+            <div id="postsList">
+                <!-- Posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLoginModal">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginUsername">Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit">Login</button>
+            </form>
+            <div id="loginSuccessMessage" class="success-message">
+                Login successful!
+            </div>
+            <div id="loginErrorMessage" class="error-message">
+                Invalid username or password.
+            </div>
+            <div class="auth-toggle">
+                <p>Don't have an account? <a href="#" id="showRegisterFromLogin">Register</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeRegisterModal">&times;</span>
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerUsername">Username</label>
+                    <input type="text" id="registerUsername" placeholder="Choose a username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Choose a password" required>
+                </div>
+                
+                <button type="submit">Register</button>
+            </form>
+            <div id="registerSuccessMessage" class="success-message">
+                Registration successful! You can now login.
+            </div>
+            <div id="registerErrorMessage" class="error-message">
+                Registration failed. Username may already be taken.
+            </div>
+            <div class="auth-toggle">
+                <p>Already have an account? <a href="#" id="showLoginFromRegister">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">Twitter</a>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+                <a href="#">LinkedIn</a>
+            </div>
+            <p>&copy; 2023 BlogApp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const showRegisterFromLogin = document.getElementById('showRegisterFromLogin');
+        const showLoginFromRegister = document.getElementById('showLoginFromRegister');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const postForm = document.getElementById('postForm');
+        const postFormContainer = document.getElementById('postFormContainer');
+        const postsContainer = document.getElementById('postsContainer');
+        const postsList = document.getElementById('postsList');
+        const authButtons = document.getElementById('authButtons');
+        const userInfo = document.getElementById('userInfo');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        
+        // Messages
+        const loginSuccessMessage = document.getElementById('loginSuccessMessage');
+        const loginErrorMessage = document.getElementById('loginErrorMessage');
+        const registerSuccessMessage = document.getElementById('registerSuccessMessage');
+        const registerErrorMessage = document.getElementById('registerErrorMessage');
+        const postSuccessMessage = document.getElementById('postSuccessMessage');
+        const postErrorMessage = document.getElementById('postErrorMessage');
+        
+        // Check if user is logged in on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            
+            if (token && username) {
+                showLoggedInState(username);
+                loadPosts();
+            } else {
+                showLoggedOutState();
+                loadPosts();
+            }
         });
-
-        const result = await response.json();
-        alert("Post created: " + JSON.stringify(result));
-    });
-</script>
+        
+        // Modal Event Listeners
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        registerBtn.addEventListener('click', () => {
+            registerModal.style.display = 'flex';
+        });
+        
+        closeLoginModal.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+        
+        closeRegisterModal.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+        });
+        
+        showRegisterFromLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+        });
+        
+        showLoginFromRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+            if (e.target === registerModal) {
+                registerModal.style.display = 'none';
+            }
+        });
+        
+        // Login Form Submit
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store token and username
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.username);
+                    
+                    // Show success message
+                    loginSuccessMessage.style.display = 'block';
+                    loginErrorMessage.style.display = 'none';
+                    
+                    // Close modal after delay
+                    setTimeout(() => {
+                        loginModal.style.display = 'none';
+                        loginSuccessMessage.style.display = 'none';
+                        showLoggedInState(data.username);
+                    }, 1500);
+                } else {
+                    // Show error message
+                    loginErrorMessage.style.display = 'block';
+                    loginSuccessMessage.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                loginErrorMessage.style.display = 'block';
+                loginSuccessMessage.style.display = 'none';
+            }
+        });
+        
+        // Register Form Submit
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Show success message
+                    registerSuccessMessage.style.display = 'block';
+                    registerErrorMessage.style.display = 'none';
+                    
+                    // Reset form
+                    registerForm.reset();
+                    
+                    // Close modal after delay
+                    setTimeout(() => {
+                        registerModal.style.display = 'none';
+                        registerSuccessMessage.style.display = 'none';
+                        loginModal.style.display = 'flex';
+                    }, 2000);
+                } else {
+                    // Show error message
+                    registerErrorMessage.style.display = 'block';
+                    registerSuccessMessage.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                registerErrorMessage.style.display = 'block';
+                registerSuccessMessage.style.display = 'none';
+            }
+        });
+        
+        // Post Form Submit
+        postForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch('/api/post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, content })
+                });
+                
+                if (response.ok) {
+                    // Show success message
+                    postSuccessMessage.style.display = 'block';
+                    postErrorMessage.style.display = 'none';
+                    
+                    // Reset form
+                    postForm.reset();
+                    
+                    // Hide success message after delay
+                    setTimeout(() => {
+                        postSuccessMessage.style.display = 'none';
+                    }, 3000);
+                    
+                    // Reload posts
+                    loadPosts();
+                } else {
+                    // Show error message
+                    postErrorMessage.style.display = 'block';
+                    postSuccessMessage.style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Post creation error:', error);
+                postErrorMessage.style.display = 'block';
+                postSuccessMessage.style.display = 'none';
+            }
+        });
+        
+        // Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            showLoggedOutState();
+        });
+        
+        // Load Posts
+        async function loadPosts() {
+            try {
+                const response = await fetch('/api/post');
+                const posts = await response.json();
+                
+                // Clear existing posts
+                postsList.innerHTML = '';
+                
+                if (posts.length === 0) {
+                    postsList.innerHTML = '<p>No posts found. Be the first to create one!</p>';
+                    return;
+                }
+                
+                // Display posts
+                posts.forEach(post => {
+                    const postCard = document.createElement('div');
+                    postCard.className = 'post-card';
+                    
+                    const date = new Date(post.createdAt).toLocaleDateString();
+                    
+                    postCard.innerHTML = `
+                        <h3 class="post-title">${post.title}</h3>
+                        <div class="post-meta">By ${post.author} on ${date}</div>
+                        <div class="post-content">${post.content}</div>
+                    `;
+                    
+                    postsList.appendChild(postCard);
+                });
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                postsList.innerHTML = '<p>Error loading posts. Please try again later.</p>';
+            }
+        }
+        
+        // Show logged in state
+        function showLoggedInState(username) {
+            authButtons.classList.add('hidden');
+            userInfo.classList.remove('hidden');
+            usernameDisplay.textContent = `Welcome, ${username}!`;
+            postFormContainer.classList.remove('hidden');
+        }
+        
+        // Show logged out state
+        function showLoggedOutState() {
+            authButtons.classList.remove('hidden');
+            userInfo.classList.add('hidden');
+            postFormContainer.classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
