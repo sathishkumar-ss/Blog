@@ -7,13 +7,43 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
-            --primary-color: #6C63FF;
-            --secondary-color: #F50057;
-            --text-color: #333;
-            --light-bg: #F9F9F9;
-            --border-color: #E0E0E0;
+            --primary-color: #3D405B;
+            --secondary-color: #81B29A;
+            --text-color: #3D405B;
+            --light-bg: #F4F1DE;
+            --border-color: #F2CC8F;
+            --accent-color: #E07A5F;
             --success-color: #4CAF50;
             --error-color: #F44336;
+            --card-gradient: linear-gradient(135deg, #3D405B, #81B29A);
+            --card-gradient-2: linear-gradient(135deg, #81B29A, #F2CC8F);
+            --card-gradient-3: linear-gradient(135deg, #F2CC8F, #E07A5F);
+            --card-gradient-4: linear-gradient(135deg, #3D405B, #E07A5F);
+            --nav-button-color: #3D405B;
+            --card-bg: white;
+            --modal-bg: white;
+            --header-bg: white;
+            --footer-bg: white;
+            --form-bg: white;
+        }
+        
+        :root[data-theme="dark"] {
+            --primary-color: #81B29A;
+            --secondary-color: #3D405B;
+            --text-color: #F4F1DE;
+            --light-bg: #1A1C2A;
+            --border-color: #E07A5F;
+            --accent-color: #F2CC8F;
+            --card-gradient: linear-gradient(135deg, #3D405B, #81B29A);
+            --card-gradient-2: linear-gradient(135deg, #81B29A, #F2CC8F);
+            --card-gradient-3: linear-gradient(135deg, #F2CC8F, #E07A5F);
+            --card-gradient-4: linear-gradient(135deg, #3D405B, #E07A5F);
+            --nav-button-color: #F2CC8F;
+            --card-bg: #2A2D3E;
+            --modal-bg: #2A2D3E;
+            --header-bg: #1A1C2A;
+            --footer-bg: #1A1C2A;
+            --form-bg: #2A2D3E;
         }
         
         * {
@@ -38,12 +68,13 @@
         }
         
         header {
-            background-color: white;
+            background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 1rem 0;
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .header-content {
@@ -58,7 +89,7 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--accent-color);
         }
         
         .nav-links {
@@ -75,7 +106,7 @@
         }
         
         .nav-links a:hover {
-            color: var(--primary-color);
+            color: var(--accent-color);
         }
         
         .auth-buttons {
@@ -90,30 +121,53 @@
             cursor: pointer;
             transition: all 0.3s;
             border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover::after {
+            transform: translateX(0);
         }
         
         .btn-primary {
-            background-color: var(--primary-color);
+            background-color: var(--accent-color);
             color: white;
+            box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
         
         .btn-primary:hover {
-            background-color: #5A52E0;
+            background-color: #D06A4F;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.4);
         }
         
         .btn-outline {
             background-color: transparent;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
         }
         
         .btn-outline:hover {
-            background-color: var(--primary-color);
+            background-color: var(--accent-color);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(224, 122, 95, 0.3);
         }
         
         .hero {
-            background: linear-gradient(135deg, var(--primary-color), #8B80FF);
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             color: white;
             padding: 4rem 0;
             text-align: center;
@@ -132,17 +186,18 @@
         }
         
         .form-container {
-            background-color: white;
+            background-color: var(--form-bg);
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             max-width: 800px;
             margin: -3rem auto 3rem;
             position: relative;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .form-container h2 {
-            color: var(--primary-color);
+            color: var(--accent-color);
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
             text-align: center;
@@ -165,12 +220,13 @@
             border-radius: 5px;
             font-family: 'Poppins', sans-serif;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         
         input:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.2);
         }
         
         textarea {
@@ -179,7 +235,7 @@
         }
         
         button {
-            background-color: var(--primary-color);
+            background-color: var(--accent-color);
             color: white;
             border: none;
             padding: 0.8rem 2rem;
@@ -187,14 +243,33 @@
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: all 0.3s;
             display: block;
             margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
         
         button:hover {
-            background-color: #5A52E0;
+            background-color: #D06A4F;
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(224, 122, 95, 0.4);
+        }
+        
+        button:hover::after {
+            transform: translateX(0);
         }
         
         .success-message {
@@ -204,6 +279,7 @@
             border-radius: 5px;
             margin-top: 1rem;
             display: none;
+            animation: fadeIn 0.5s ease;
         }
         
         .error-message {
@@ -213,34 +289,99 @@
             border-radius: 5px;
             margin-top: 1rem;
             display: none;
+            animation: fadeIn 0.5s ease;
         }
         
         .posts-container {
             margin-top: 2rem;
         }
         
-        .post-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
+        .posts-container h2 {
+            color: var(--accent-color);
             margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .post-card {
+            background: var(--card-gradient);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            color: white;
+        }
+        
+        .post-card:nth-child(2n) {
+            background: var(--card-gradient-2);
+        }
+        
+        .post-card:nth-child(3n) {
+            background: var(--card-gradient-3);
+        }
+        
+        .post-card:nth-child(4n) {
+            background: var(--card-gradient-4);
+        }
+        
+        .post-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
         .post-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
+            font-size: 1.3rem;
+            color: white;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
         }
         
         .post-meta {
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
         }
         
         .post-content {
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 6;
+            -webkit-box-orient: vertical;
+            flex-grow: 1;
+            color: white;
         }
         
         .modal {
@@ -254,15 +395,49 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: none;
         }
         
         .modal-content {
-            background-color: white;
+            background-color: var(--modal-bg);
             border-radius: 10px;
             padding: 2rem;
             width: 90%;
             max-width: 500px;
             position: relative;
+            animation: scaleIn 0.3s ease;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .post-modal-content {
+            background-color: var(--modal-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 800px;
+            position: relative;
+            animation: scaleIn 0.3s ease;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .post-modal-title {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+        
+        .post-modal-meta {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .post-modal-content-text {
+            /* line-height: 1.8; */
+            max-height: 50vh;
+            overflow-y: auto;
+            white-space: pre-line;
+            color: var(--text-color);
         }
         
         .close-modal {
@@ -272,6 +447,16 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: #666;
+            transition: color 0.3s;
+            z-index: 1001;
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent-color);
         }
         
         .auth-toggle {
@@ -280,20 +465,23 @@
         }
         
         .auth-toggle a {
-            color: var(--primary-color);
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s;
         }
         
         .auth-toggle a:hover {
+            color: var(--accent-color);
             text-decoration: underline;
         }
         
         footer {
-            background-color: white;
+            background-color: var(--footer-bg);
             padding: 2rem 0;
             text-align: center;
             border-top: 1px solid var(--border-color);
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .social-links {
@@ -306,15 +494,44 @@
         .social-links a {
             color: var(--text-color);
             font-size: 1.5rem;
-            transition: color 0.3s;
+            transition: color 0.3s, transform 0.3s;
         }
         
         .social-links a:hover {
-            color: var(--primary-color);
+            color: var(--accent-color);
+            transform: translateY(-3px);
         }
         
         .hidden {
             display: none;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         @media (max-width: 768px) {
@@ -340,6 +557,33 @@
             .form-container {
                 margin: -2rem 1rem 2rem;
             }
+            
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--border-color);
+            color: var(--light-bg);
+        }
+        
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
         }
     </style>
 </head>
@@ -349,7 +593,7 @@
             <div class="logo">BlogApp</div>
             <nav class="nav-links">
                 <a href="#" id="homeLink">Home</a>
-                <a href="#" id="postsLink">Posts</a>
+                <a href="#postsContainer" id="postsLink">Posts</a>
                 <a href="#" id="aboutLink">About</a>
                 <a href="#" id="contactLink">Contact</a>
                 <div class="auth-buttons" id="authButtons">
@@ -360,6 +604,19 @@
                     <span id="usernameDisplay"></span>
                     <button class="btn btn-outline" id="logoutBtn">Logout</button>
                 </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
             </nav>
         </div>
     </header>
@@ -399,7 +656,7 @@
         <!-- Posts Display -->
         <div class="posts-container" id="postsContainer">
             <h2>Recent Blog Posts</h2>
-            <div id="postsList">
+            <div class="posts-grid" id="postsList">
                 <!-- Posts will be loaded here -->
             </div>
         </div>
@@ -470,6 +727,16 @@
         </div>
     </div>
 
+    <!-- Post Detail Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content post-modal-content">
+            <span class="close-modal" id="closePostModal">&times;</span>
+            <h2 class="post-modal-title" id="postModalTitle"></h2>
+            <div class="post-modal-meta" id="postModalMeta"></div>
+            <div class="post-modal-content-text" id="postModalContent"></div>
+        </div>
+    </div>
+
     <footer>
         <div class="container">
             <div class="social-links">
@@ -489,8 +756,10 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const loginModal = document.getElementById('loginModal');
         const registerModal = document.getElementById('registerModal');
+        const postModal = document.getElementById('postModal');
         const closeLoginModal = document.getElementById('closeLoginModal');
         const closeRegisterModal = document.getElementById('closeRegisterModal');
+        const closePostModal = document.getElementById('closePostModal');
         const showRegisterFromLogin = document.getElementById('showRegisterFromLogin');
         const showLoginFromRegister = document.getElementById('showLoginFromRegister');
         const loginForm = document.getElementById('loginForm');
@@ -502,6 +771,16 @@
         const authButtons = document.getElementById('authButtons');
         const userInfo = document.getElementById('userInfo');
         const usernameDisplay = document.getElementById('usernameDisplay');
+        const homeLink = document.getElementById('homeLink');
+        const postsLink = document.getElementById('postsLink');
+        const aboutLink = document.getElementById('aboutLink');
+        const contactLink = document.getElementById('contactLink');
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Post Modal Elements
+        const postModalTitle = document.getElementById('postModalTitle');
+        const postModalMeta = document.getElementById('postModalMeta');
+        const postModalContent = document.getElementById('postModalContent');
         
         // Messages
         const loginSuccessMessage = document.getElementById('loginSuccessMessage');
@@ -511,10 +790,51 @@
         const postSuccessMessage = document.getElementById('postSuccessMessage');
         const postErrorMessage = document.getElementById('postErrorMessage');
         
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update theme toggle icon
+            updateThemeIcon(newTheme);
+        }
+        
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                `;
+            } else {
+                themeToggle.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                `;
+            }
+        }
+        
         // Check if user is logged in on page load
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('token');
             const username = localStorage.getItem('username');
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            
+            // Apply saved theme
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
             
             if (token && username) {
                 showLoggedInState(username);
@@ -523,6 +843,22 @@
                 showLoggedOutState();
                 loadPosts();
             }
+            
+            // Add event listeners for modal close buttons
+            closeLoginModal.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+            });
+            
+            closeRegisterModal.addEventListener('click', () => {
+                registerModal.style.display = 'none';
+            });
+            
+            closePostModal.addEventListener('click', () => {
+                postModal.style.display = 'none';
+            });
+            
+            // Add event listener for theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
         });
         
         // Modal Event Listeners
@@ -532,14 +868,6 @@
         
         registerBtn.addEventListener('click', () => {
             registerModal.style.display = 'flex';
-        });
-        
-        closeLoginModal.addEventListener('click', () => {
-            loginModal.style.display = 'none';
-        });
-        
-        closeRegisterModal.addEventListener('click', () => {
-            registerModal.style.display = 'none';
         });
         
         showRegisterFromLogin.addEventListener('click', (e) => {
@@ -561,6 +889,9 @@
             }
             if (e.target === registerModal) {
                 registerModal.style.display = 'none';
+            }
+            if (e.target === postModal) {
+                postModal.style.display = 'none';
             }
         });
         
@@ -703,6 +1034,27 @@
             showLoggedOutState();
         });
         
+        // Navigation Event Listeners
+        homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        postsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            postsContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        aboutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('About page coming soon!');
+        });
+        
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Contact page coming soon!');
+        });
+        
         // Load Posts
         async function loadPosts() {
             try {
@@ -717,10 +1069,11 @@
                     return;
                 }
                 
-                // Display posts
-                posts.forEach(post => {
+                // Display posts with staggered animation
+                posts.forEach((post, index) => {
                     const postCard = document.createElement('div');
                     postCard.className = 'post-card';
+                    postCard.style.animationDelay = `${index * 0.1}s`;
                     
                     const date = new Date(post.createdAt).toLocaleDateString();
                     
@@ -729,6 +1082,14 @@
                         <div class="post-meta">By ${post.author} on ${date}</div>
                         <div class="post-content">${post.content}</div>
                     `;
+                    
+                    // Add click event to show full post
+                    postCard.addEventListener('click', () => {
+                        postModalTitle.textContent = post.title;
+                        postModalMeta.textContent = `By ${post.author} on ${date}`;
+                        postModalContent.textContent = post.content;
+                        postModal.style.display = 'flex';
+                    });
                     
                     postsList.appendChild(postCard);
                 });
