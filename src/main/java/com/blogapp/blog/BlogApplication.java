@@ -2,7 +2,7 @@ package com.blogapp.blog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+//without react
 @SpringBootApplication
 public class BlogApplication {
 
