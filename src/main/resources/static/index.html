@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Post Creator</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #3D405B;
@@ -63,10 +64,15 @@
             margin: 0;
         }
         
-        .container {
+        /* .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+        } */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
         
         header {
@@ -479,7 +485,7 @@
             text-decoration: underline;
         }
         
-        footer {
+        /* footer {
             background-color: var(--footer-bg);
             padding: 2rem 0;
             text-align: center;
@@ -503,7 +509,60 @@
         .social-links a:hover {
             color: var(--accent-color);
             transform: translateY(-3px);
+        } */
+
+        footer {
+            background-color: var(--card-bg);
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
         }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section p {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.25rem;
+            transition: color 0.3s, transform 0.3s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+        }
+        
+        .social-links a:hover {
+            color: var(--text-color);
+            transform: translateY(-3px);
+            background-color: var(--secondary-color);
+        }
+
+
         
         .hidden {
             display: none;
@@ -631,6 +690,28 @@
         </div>
     </section>
 
+
+    <!-- About Section -->
+<!-- <section id="aboutSection" class="container hidden">
+    <h2>About Us</h2>
+    <p>Welcome to BlogApp! We are dedicated to providing a platform for users to share their thoughts and ideas through blogging. Our mission is to create a community where everyone can express themselves freely and connect with others.</p>
+    <p>Whether you're a seasoned writer or just starting, BlogApp is here to support you in your blogging journey. Join us and start sharing your stories today!</p>
+</section> -->
+
+<!-- Contact Section -->
+<!-- <section id="contactSection" class="container hidden">
+    <h2>Contact Us</h2>
+    <p>If you have any questions, feedback, or suggestions, feel free to reach out to us!</p>
+    <p>You can contact us via email at <a href="mailto:support@blogapp.com">support@blogapp.com</a>.</p>
+    <p>Follow us on our social media channels for updates and news:</p>
+    <ul>
+        <li><a href="#">Twitter</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Instagram</a></li>
+    </ul>
+</section> -->
+
+
     <div class="container">
         <!-- Post Creation Form (Only visible when logged in) -->
         <div class="form-container hidden" id="postFormContainer">
@@ -740,7 +821,7 @@
         </div>
     </div>
 
-    <footer>
+    <!-- <footer>
         <div class="container">
             <div class="social-links">
                 <a href="#">Twitter</a>
@@ -750,7 +831,40 @@
             </div>
             <p>&copy; 2023 BlogApp. All rights reserved.</p>
         </div>
+    </footer> -->
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section" id="footerAbout">
+                    <h3>About BlogApp</h3>
+                    <p>A modern platform for writers to share their stories and connect with readers around the world.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="mailto:sathishsshere@gmail.com" target = "_blank"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.linkedin.com/in/sathishkumarss" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#" style="color: var(--text-light); text-decoration: none;">Home</a></p>
+                    <p><a href="#postsContainer" style="color: var(--text-light); text-decoration: none;">Posts</a></p>
+                    <!-- <p><a href="#" style="color: var(--text-light); text-decoration: none;">About</a></p>
+                    <p><a href="#" style="color: var(--text-light); text-decoration: none;">Contact</a></p> -->
+                </div>
+                <div class="footer-section" id="footerContact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> info@blogapp.com</p>
+                    <p><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 BlogApp. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
+    
 
     <script>
         // DOM Elements
@@ -1042,21 +1156,32 @@
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+        // Navigation Event Listeners
         
         postsLink.addEventListener('click', (e) => {
             e.preventDefault();
             postsContainer.scrollIntoView({ behavior: 'smooth' });
         });
         
+        // aboutLink.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     alert('About page coming soon!');
+        // });
+
         aboutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('About page coming soon!');
-        });
+    e.preventDefault();
+    document.getElementById('footerAbout').scrollIntoView({ behavior: 'smooth' });
+});
+
+contactLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('footerContact').scrollIntoView({ behavior: 'smooth' });
+});
         
-        contactLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Contact page coming soon!');
-        });
+        // contactLink.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     alert('Contact page coming soon!');
+        // });
         
         // Load Posts
         async function loadPosts() {
