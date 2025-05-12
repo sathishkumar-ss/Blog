@@ -23,7 +23,7 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Post createPost(Post post) {
+    public Post savePost(Post post) {
         return postRepository.save(post);
     }
 
@@ -32,6 +32,13 @@ public class PostService {
         post.setTitle(postDetails.getTitle());
         post.setContent(postDetails.getContent());
         post.setAuthor(postDetails.getAuthor());
+        
+        // Only update image if it's provided
+        if (postDetails.getImageName() != null) {
+            post.setImageName(postDetails.getImageName());
+            post.setImageUrl(postDetails.getImageUrl());
+        }
+        
         return postRepository.save(post);
     }
 

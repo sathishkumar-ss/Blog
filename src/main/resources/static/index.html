@@ -647,6 +647,54 @@
             width: 20px;
             height: 20px;
         }
+        
+        .post-image {
+            margin: 1rem 0;
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .post-image img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .post-image img:hover {
+            transform: scale(1.03);
+        }
+        
+        .post-modal-image {
+            margin: 1rem 0;
+            text-align: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .post-modal-image img {
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        
+        input[type="file"] {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            width: 100%;
+            font-size: 0.9rem;
+        }
+        
+        small {
+            display: block;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -725,6 +773,12 @@
                 <div class="form-group">
                     <label for="content">Content</label>
                     <textarea id="content" placeholder="Write your blog post content here..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="image">Image (Optional)</label>
+                    <input type="file" id="image" accept="image/*">
+                    <small>Upload an image to display with your post.</small>
                 </div>
                 
                 <button type="submit">Publish Post</button>
@@ -855,12 +909,12 @@
                 </div>
                 <div class="footer-section" id="footerContact">
                     <h3>Contact Us</h3>
-                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> info@blogapp.com</p>
-                    <p><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-envelope" style="margin-right: 0.5rem;"></i> sathishsshere@gmail.com</p>
+                    <p><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> +91 6382769375</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 BlogApp. All rights reserved.</p>
+                <p>&copy; 2025 BlogApp. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -1105,16 +1159,26 @@
             e.preventDefault();
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
+            const imageFile = document.getElementById('image').files[0];
             const token = localStorage.getItem('token');
+            const author = localStorage.getItem('username');
             
             try {
+                const formData = new FormData();
+                formData.append('title', title);
+                formData.append('content', content);
+                formData.append('author', author);
+                
+                if (imageFile) {
+                    formData.append('image', imageFile);
+                }
+                
                 const response = await fetch('/api/post', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ title, content })
+                    body: formData
                 });
                 
                 if (response.ok) {
@@ -1189,6 +1253,9 @@ contactLink.addEventListener('click', (e) => {
                 const response = await fetch('/api/post');
                 const posts = await response.json();
                 
+                // Debug - log posts data
+                console.log('Posts received:', posts);
+                
                 // Clear existing posts
                 postsList.innerHTML = '';
                 
@@ -1199,23 +1266,52 @@ contactLink.addEventListener('click', (e) => {
                 
                 // Display posts with staggered animation
                 posts.forEach((post, index) => {
+                    // Debug - log individual post
+                    console.log(`Post ${index}:`, post);
+                    console.log(`Post ${index} image:`, post.imageUrl, post.imageName);
+                    
                     const postCard = document.createElement('div');
                     postCard.className = 'post-card';
                     postCard.style.animationDelay = `${index * 0.1}s`;
                     
                     const date = new Date(post.createdAt).toLocaleDateString();
                     
+                    let imageHtml = '';
+                    if (post.imageUrl) {
+                        // Use absolute URL based on current window location
+                        const baseUrl = window.location.origin;
+                        const imageUrl = post.imageUrl.startsWith('/') 
+                            ? baseUrl + post.imageUrl 
+                            : baseUrl + '/' + post.imageUrl;
+                            
+                        console.log('Image URL in card (absolute):', imageUrl);
+                        imageHtml = `<div class="post-image"><img src="${imageUrl}" alt="${post.title}" onerror="this.onerror=null; this.src=''; console.error('Failed to load image:', this.src);" /></div>`;
+                    }
+                    
                     postCard.innerHTML = `
                         <h3 class="post-title">${post.title}</h3>
                         <div class="post-meta">By ${post.author} on ${date}</div>
+                        ${imageHtml}
                         <div class="post-content">${post.content}</div>
                     `;
                     
                     // Add click event to show full post
                     postCard.addEventListener('click', () => {
+                        let modalImageHtml = '';
+                        if (post.imageUrl) {
+                            // Use absolute URL based on current window location
+                            const baseUrl = window.location.origin;
+                            const imageUrl = post.imageUrl.startsWith('/') 
+                                ? baseUrl + post.imageUrl 
+                                : baseUrl + '/' + post.imageUrl;
+                                
+                            console.log('Image URL in modal (absolute):', imageUrl);
+                            modalImageHtml = `<div class="post-modal-image"><img src="${imageUrl}" alt="${post.title}" onerror="this.onerror=null; this.src=''; console.error('Failed to load image:', this.src);" /></div>`;
+                        }
+                        
                         postModalTitle.textContent = post.title;
                         postModalMeta.textContent = `By ${post.author} on ${date}`;
-                        postModalContent.textContent = post.content;
+                        postModalContent.innerHTML = modalImageHtml + post.content;
                         postModal.style.display = 'flex';
                     });
                     

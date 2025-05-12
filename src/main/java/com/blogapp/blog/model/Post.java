@@ -17,6 +17,11 @@ public class Post {
     private String author;
 
     private LocalDateTime createdAt = LocalDateTime.now();
+    
+    // Fields for image storage
+    private String imageName;
+    
+    private String imageUrl;
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -33,6 +38,12 @@ public class Post {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public String getImageName() { return imageName; }
+    public void setImageName(String imageName) { this.imageName = imageName; }
+    
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }
 
 // package com.blogapp.blog.model;

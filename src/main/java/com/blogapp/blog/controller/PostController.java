@@ -2,20 +2,25 @@ package com.blogapp.blog.controller;
 
 import com.blogapp.blog.model.Post;
 import com.blogapp.blog.service.PostService;
+import com.blogapp.blog.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/post")
+@CrossOrigin(origins = "*")
 public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public List<Post> getAllPosts() {
@@ -40,24 +45,61 @@ public class PostController {
     }
 
     @PostMapping
-    public Post createPost(@RequestBody Post post) {
-        // Get the current authenticated user
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        
-        // Only set the author to the logged-in username if the author field is null or empty
-        if (authentication != null && authentication.isAuthenticated() && 
-            !"anonymousUser".equals(authentication.getPrincipal()) && 
-            (post.getAuthor() == null || post.getAuthor().trim().isEmpty())) {
-            // Set the author as the logged-in username
-            post.setAuthor(authentication.getName());
+    public ResponseEntity<Post> createPost(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("author") String author,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        try {
+            Post post = new Post();
+            post.setTitle(title);
+            post.setContent(content);
+            post.setAuthor(author);
+
+            if (image != null && !image.isEmpty()) {
+                String imageName = fileStorageService.storeFile(image);
+                post.setImageName(imageName);
+                post.setImageUrl("/api/files/" + imageName);
+            }
+
+            return ResponseEntity.ok(postService.savePost(post));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        
-        return postService.createPost(post);
     }
 
     @PutMapping("/{id}")
-    public Post updatePost(@PathVariable Long id, @RequestBody Post post) {
-        return postService.updatePost(id, post);
+    public ResponseEntity<Post> updatePost(
+            @PathVariable Long id,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("author") String author,
+            @RequestParam(value = "image", required = false) MultipartFile image) {
+        try {
+            Optional<Post> postOptional = postService.getPostById(id);
+            if (postOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            Post existingPost = postOptional.get();
+            existingPost.setTitle(title);
+            existingPost.setContent(content);
+            existingPost.setAuthor(author);
+
+            if (image != null && !image.isEmpty()) {
+                // Delete old image if exists
+                if (existingPost.getImageName() != null) {
+                    fileStorageService.deleteFile(existingPost.getImageName());
+                }
+                String imageName = fileStorageService.storeFile(image);
+                existingPost.setImageName(imageName);
+                existingPost.setImageUrl("/api/files/" + imageName);
+            }
+
+            return ResponseEntity.ok(postService.savePost(existingPost));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @DeleteMapping("/{id}")
