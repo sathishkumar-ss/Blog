@@ -13,6 +13,9 @@ public class Post {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+    
+    @Column(columnDefinition = "TEXT")
+    private String htmlContent;
 
     private String author;
 
@@ -32,6 +35,9 @@ public class Post {
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
+    public String getHtmlContent() { return htmlContent; }
+    public void setHtmlContent(String htmlContent) { this.htmlContent = htmlContent; }
 
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
