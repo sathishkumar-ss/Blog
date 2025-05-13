@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
+import java.util.Objects;
 
 @Service
 public class FileStorageService {
@@ -30,7 +31,7 @@ public class FileStorageService {
 
     public String storeFile(MultipartFile file) {
         // Generate a unique filename
-        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String originalFileName = StringUtils.cleanPath(Objects.toString(file.getOriginalFilename(), "unknown-filename"));
         String fileExtension = "";
 
         if (originalFileName.contains(".")) {
