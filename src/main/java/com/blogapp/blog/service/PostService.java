@@ -2,6 +2,7 @@ package com.blogapp.blog.service;
 
 import com.blogapp.blog.repository.PostRepository;
 import com.blogapp.blog.model.Post;
+import com.blogapp.blog.util.MarkdownProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
+    
+    @Autowired
+    private MarkdownProcessor markdownProcessor;
 
     public List<Post> getAllPosts() {
         System.out.println("sathishhh");
@@ -24,6 +28,10 @@ public class PostService {
     }
 
     public Post savePost(Post post) {
+        // Process Markdown content to HTML
+        if (post.getContent() != null) {
+            post.setHtmlContent(markdownProcessor.convertMarkdownToHtml(post.getContent()));
+        }
         return postRepository.save(post);
     }
 
@@ -31,6 +39,12 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(postDetails.getTitle());
         post.setContent(postDetails.getContent());
+        
+        // Process Markdown content to HTML
+        if (postDetails.getContent() != null) {
+            post.setHtmlContent(markdownProcessor.convertMarkdownToHtml(postDetails.getContent()));
+        }
+        
         post.setAuthor(postDetails.getAuthor());
         
         // Only update image if it's provided
