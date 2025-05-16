@@ -3,12 +3,15 @@ package com.blogapp.blog.controller;
 import com.blogapp.blog.model.Post;
 import com.blogapp.blog.service.PostService;
 import com.blogapp.blog.service.FileStorageService;
+import com.blogapp.blog.util.MarkdownProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +24,9 @@ public class PostController {
 
     @Autowired
     private FileStorageService fileStorageService;
+    
+    @Autowired
+    private MarkdownProcessor markdownProcessor;
 
     @GetMapping
     public List<Post> getAllPosts() {
@@ -105,6 +111,26 @@ public class PostController {
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable Long id) {
         postService.deletePost(id);
+    }
+    
+    /**
+     * Preview endpoint to convert markdown to HTML
+     * This allows client-side preview without saving the post
+     */
+    @PostMapping("/preview")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<Map<String, String>> previewMarkdown(@RequestBody Map<String, String> payload) {
+        try {
+            String markdownContent = payload.get("markdown");
+            String htmlContent = markdownProcessor.convertMarkdownToHtml(markdownContent);
+            
+            Map<String, String> response = new HashMap<>();
+            response.put("html", htmlContent);
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
 

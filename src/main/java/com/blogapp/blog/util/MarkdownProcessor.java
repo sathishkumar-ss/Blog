@@ -28,6 +28,7 @@ public class MarkdownProcessor {
                 
         renderer = HtmlRenderer.builder()
                 .extensions(extensions)
+                .softbreak("<br />")
                 .build();
     }
 
@@ -41,6 +42,8 @@ public class MarkdownProcessor {
         if (markdown == null) {
             return "";
         }
+        
+        markdown = markdown.replaceAll("(?<!\n)\n(?!\n)", "\n\n");
         
         Node document = parser.parse(markdown);
         return renderer.render(document);

@@ -695,6 +695,129 @@
             margin-top: 0.25rem;
             font-size: 0.8rem;
         }
+        
+        .markdown-editor-container {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .markdown-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 5px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .md-tool {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .md-tool:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .markdown-preview {
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            overflow-y: auto;
+        }
+        
+        .markdown-preview h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-preview h2 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-preview p {
+            margin-bottom: 1rem;
+        }
+        
+        .markdown-preview code {
+            background-color: #f1f1f1;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .markdown-preview strong {
+            font-weight: bold;
+        }
+        
+        .markdown-preview em {
+            font-style: italic;
+        }
+        
+        .markdown-preview img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .markdown-helper {
+            margin-top: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-small:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .markdown-cheat-sheet {
+            margin-top: 0.5rem;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+        
+        .markdown-cheat-sheet h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-cheat-sheet table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .markdown-cheat-sheet th, 
+        .markdown-cheat-sheet td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .markdown-cheat-sheet th {
+            background-color: #eaeaea;
+        }
     </style>
 </head>
 <body>
@@ -771,8 +894,63 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea id="content" placeholder="Write your blog post content here..." required></textarea>
+                    <label for="content">Content (Markdown supported)</label>
+                    <div class="markdown-toolbar">
+                        <button type="button" class="md-tool" data-md="h1"># Heading 1</button>
+                        <button type="button" class="md-tool" data-md="h2">## Heading 2</button>
+                        <button type="button" class="md-tool" data-md="bold">**Bold**</button>
+                        <button type="button" class="md-tool" data-md="italic">*Italic*</button>
+                        <button type="button" class="md-tool" data-md="code">`Code`</button>
+                        <button type="button" class="md-tool" data-md="link">[Link](url)</button>
+                    </div>
+                    <div class="markdown-editor-container">
+                        <textarea id="content" placeholder="Write your blog post content here... (Markdown supported)" required></textarea>
+                    </div>
+                    <div class="markdown-helper">
+                        <button type="button" id="toggleCheatSheet" class="btn-small">Show Markdown Cheat Sheet</button>
+                        <div id="markdownCheatSheet" class="markdown-cheat-sheet hidden">
+                            <h4>Markdown Cheat Sheet</h4>
+                            <table>
+                                <tr>
+                                    <th>Element</th>
+                                    <th>Markdown Syntax</th>
+                                </tr>
+                                <tr>
+                                    <td>Heading 1</td>
+                                    <td><code># Heading 1</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Heading 2</td>
+                                    <td><code>## Heading 2</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Bold</td>
+                                    <td><code>**bold text**</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Italic</td>
+                                    <td><code>*italicized text*</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Code</td>
+                                    <td><code>`code`</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Link</td>
+                                    <td><code>[title](https://www.example.com)</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Image</td>
+                                    <td><code>![alt text](image.jpg)</code></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="preview">Preview</label>
+                    <div id="preview" class="markdown-preview"></div>
                 </div>
                 
                 <div class="form-group">
@@ -1292,7 +1470,7 @@ contactLink.addEventListener('click', (e) => {
                         <h3 class="post-title">${post.title}</h3>
                         <div class="post-meta">By ${post.author} on ${date}</div>
                         ${imageHtml}
-                        <div class="post-content">${post.content}</div>
+                        <div class="post-content">${post.htmlContent || post.content}</div>
                     `;
                     
                     // Add click event to show full post
@@ -1311,7 +1489,7 @@ contactLink.addEventListener('click', (e) => {
                         
                         postModalTitle.textContent = post.title;
                         postModalMeta.textContent = `By ${post.author} on ${date}`;
-                        postModalContent.innerHTML = modalImageHtml + post.content;
+                        postModalContent.innerHTML = modalImageHtml + (post.htmlContent || post.content);
                         postModal.style.display = 'flex';
                     });
                     
@@ -1329,6 +1507,8 @@ contactLink.addEventListener('click', (e) => {
             userInfo.classList.remove('hidden');
             usernameDisplay.textContent = `Welcome, ${username}!`;
             postFormContainer.classList.remove('hidden');
+            // Initialize markdown preview
+            updateMarkdownPreview();
         }
         
         // Show logged out state
@@ -1337,6 +1517,179 @@ contactLink.addEventListener('click', (e) => {
             userInfo.classList.add('hidden');
             postFormContainer.classList.add('hidden');
         }
+
+        // Markdown handling
+        const contentTextarea = document.getElementById('content');
+        const previewDiv = document.getElementById('preview');
+        const mdToolButtons = document.querySelectorAll('.md-tool');
+        
+        // Function to update preview
+        function updateMarkdownPreview() {
+            const markdown = contentTextarea.value;
+            
+            if (!markdown.trim()) {
+                previewDiv.innerHTML = '<p>Your markdown preview will appear here...</p>';
+                return;
+            }
+            
+            // Try to use server-side rendering for accurate preview
+            fetch('/api/post/preview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ markdown: markdown })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to preview markdown');
+                }
+            })
+            .then(data => {
+                previewDiv.innerHTML = data.html;
+            })
+            .catch(error => {
+                console.error('Error previewing markdown:', error);
+                
+                // Improved fallback client-side rendering
+                // Process in steps to handle nested formatting correctly
+                let html = markdown;
+                
+                // Step 1: Handle code blocks (protect them from other formatting)
+                const codeBlocks = [];
+                html = html.replace(/`(.*?)`/g, (match, code) => {
+                    codeBlocks.push(code);
+                    return `__CODE_BLOCK_${codeBlocks.length - 1}__`;
+                });
+                
+                // Step 2: Handle headers
+                html = html
+                    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                    .replace(/^### (.*$)/gm, '<h3>$1</h3>');
+                
+                // Step 3: Handle bold text
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                
+                // Step 4: Handle italic text
+                html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // Step 5: Handle links
+                html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+                
+                // Step 6: Handle images
+                html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+                
+                // Step 7: Restore code blocks
+                codeBlocks.forEach((code, index) => {
+                    html = html.replace(`__CODE_BLOCK_${index}__`, `<code>${code}</code>`);
+                });
+                
+                // Step 8: Handle line breaks
+                html = html.replace(/\n/g, '<br>');
+                
+                previewDiv.innerHTML = html;
+            });
+        }
+        
+        // Debounce function to limit preview updates
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+        
+        // Debounced preview update for better performance
+        const debouncedUpdatePreview = debounce(updateMarkdownPreview, 300);
+        
+        // Add event listener for real-time preview
+        contentTextarea.addEventListener('input', debouncedUpdatePreview);
+        
+        // Handle markdown toolbar buttons
+        mdToolButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const mdType = button.getAttribute('data-md');
+                let startText = '';
+                let endText = '';
+                let placeholder = 'text';
+                
+                switch(mdType) {
+                    case 'h1':
+                        startText = '# ';
+                        endText = '';
+                        placeholder = 'Heading 1';
+                        break;
+                    case 'h2':
+                        startText = '## ';
+                        endText = '';
+                        placeholder = 'Heading 2';
+                        break;
+                    case 'bold':
+                        startText = '**';
+                        endText = '**';
+                        placeholder = 'bold text';
+                        break;
+                    case 'italic':
+                        startText = '*';
+                        endText = '*';
+                        placeholder = 'italicized text';
+                        break;
+                    case 'code':
+                        startText = '`';
+                        endText = '`';
+                        placeholder = 'code';
+                        break;
+                    case 'link':
+                        startText = '[';
+                        endText = '](url)';
+                        placeholder = 'link text';
+                        break;
+                }
+                
+                // Get cursor position
+                const startPos = contentTextarea.selectionStart;
+                const endPos = contentTextarea.selectionEnd;
+                
+                // Get selected text or use placeholder
+                const selectedText = contentTextarea.value.substring(startPos, endPos) || placeholder;
+                
+                // Insert markdown
+                const newText = contentTextarea.value.substring(0, startPos) + 
+                                startText + selectedText + endText + 
+                                contentTextarea.value.substring(endPos);
+                
+                contentTextarea.value = newText;
+                
+                // Update preview
+                updateMarkdownPreview();
+                
+                // Focus back on textarea
+                contentTextarea.focus();
+                
+                // Position cursor appropriately
+                const newCursorPos = startPos + startText.length + selectedText.length + endText.length;
+                contentTextarea.setSelectionRange(newCursorPos, newCursorPos);
+            });
+        });
+
+        // Markdown cheat sheet toggle
+        const toggleCheatSheet = document.getElementById('toggleCheatSheet');
+        const markdownCheatSheet = document.getElementById('markdownCheatSheet');
+        
+        toggleCheatSheet.addEventListener('click', () => {
+            if (markdownCheatSheet.classList.contains('hidden')) {
+                markdownCheatSheet.classList.remove('hidden');
+                toggleCheatSheet.textContent = 'Hide Markdown Cheat Sheet';
+            } else {
+                markdownCheatSheet.classList.add('hidden');
+                toggleCheatSheet.textContent = 'Show Markdown Cheat Sheet';
+            }
+        });
     </script>
 </body>
 </html>
